@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import food from '../assets/food.png';
-
+import axios from 'axios';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -55,6 +55,17 @@ const Login = () => {
         }
     };
 
+    const login = () => {
+        axios.post("http://localhost:3000/login", { email, password })
+          .then((response) => {
+            console.log(response);
+            alert("You have logged in successfully!"); 
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Invalid, please try again!"); // Error popup
+          });
+    }
     return (
         <div>
             <div className="flex">
@@ -93,7 +104,7 @@ const Login = () => {
                                     <button
                                         type="submit"
                                         className="rounded-[50px] px-8 py-4 text-white bg-orange-600 mt-7 hover:bg-orange-500 w-[350px]"
-                                    >
+                                    onClick={login} >
                                         Login
                                     </button>
                                 </div>

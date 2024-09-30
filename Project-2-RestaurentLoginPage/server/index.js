@@ -1,67 +1,77 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
+const express = require("express");
+const { MongoClient } = require("mongodb");
+const cors = require("cors");
+const { ObjectId } = require("mongodb");
 
 const app = express();
-const PORT = 5000;
-
-// Middleware
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/authentication', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('Connected to MongoDB'))
-.catch((err) => console.error('Error connecting to MongoDB:', err));
+const port = process.env.PORT || 3000;
 
-// User Schema
-const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+const mongoURI =
+  "mongodb://pradeep:pradeep189@cluster0-shard-00-00.3b3fe.mongodb.net:27017,cluster0-shard-00-01.3b3fe.mongodb.net:27017,cluster0-shard-00-02.3b3fe.mongodb.net:27017/?ssl=true&replicaSet=atlas-izhivo-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
+const client = new MongoClient(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-const User = mongoose.model('User', userSchema);
+client.connect()
+  .then(() => {
+    console.log("Connected to MongoDB Atlas");
 
-// Register User
-app.post('/api/register', async (req, res) => {
-    const { email, password } = req.body;
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
+  });
 
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: 'User already exists' });
+app.post("/signup", async (req, res) => {
+  try {
+    const {email, password } = req.body;
+console.log(email,password);
+    // Check if a user with the same email or UID already exists
+    const user = await client.db("restaurant").collection("users").findOne({ email });
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const newUser = new User({ email, password: hashedPassword });
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error registering user', error });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
     }
+
+    // Create a new user document
+    const newUser = {  email, password };
+    const result = await client.db("restaurant").collection("users").insertOne(newUser);
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
-// Login User
-app.post('/api/login', async (req, res) => {
-    const { email, password } = req.body;
-
+app.post("/login", async (req, res) => {
     try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const token = jwt.sign({ userId: user._id }, 'jwtSecret', { expiresIn: '1h' });
-        res.status(200).json({ token, message: 'Logged in successfully' });
+      const { email, password } = req.body;
+      console.log(email, password);
+  
+      // Find the user with the given email
+      const user = await client.db("restaurant").collection("users").findOne({ email });
+  
+      if (!user) {
+        return res.status(400).json({ message: "User not found" });
+      }
+  
+      // Check if the password is correct
+      if (user.password !== password) {
+        return res.status(400).json({ message: "Invalid password" });
+      }
+  
+      // User found and password matches, you can generate a token or session here
+      res.json({ message: "Login successful", user });
     } catch (error) {
-        res.status(500).json({ message: 'Error logging in user', error });
+      console.error(error);
+      res.status(500).json({ error: "An error occurred" });
     }
-});
-
-// Start server
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+  });
+  

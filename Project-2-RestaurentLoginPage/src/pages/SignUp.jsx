@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import food from '../assets/food.png';
+import axios from 'axios';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -66,6 +67,16 @@ const SignUp = () => {
             console.log('Form submitted:', { email, password });
         }
     };
+    const signup = () => {
+        axios.post("http://localhost:3000/signup", { email, password })
+          .then((response) => {
+            console.log(response);
+            alert("You have Signed in successfully!. Login in continue"); 
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
 
     return (
         <div>
@@ -117,7 +128,7 @@ const SignUp = () => {
                                     <button
                                         type="submit"
                                         className="rounded-[50px] px-8 py-4 text-white bg-orange-600 mt-7 hover:bg-orange-500 w-[350px]"
-                                    >
+                                     onClick={signup}>
                                         Sign Up
                                     </button>
                                 </div>

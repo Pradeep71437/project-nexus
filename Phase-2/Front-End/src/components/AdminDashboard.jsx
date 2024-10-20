@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
         try {
-          const response = await axios.get('/api/details');
+          const response = await axios.get('http://localhost:5000/api/details');
           console.log('API response:', response.data); // Log the response
           setFeedbacks(response.data.feedbacks2 || []); // Set feedbacks
         } catch (error) {

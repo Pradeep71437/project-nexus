@@ -1,18 +1,18 @@
+import { Route, Routes } from "react-router-dom";
 import React from 'react'
-import Hero from './components/Hero'
-import About from './components/About'
-import Pricing from './components/Pricing'
-import Feedback from './components/Feedback'
-import Footer from './components/Footer'
+import Home from "./Home";
+import AdminDashboard from "./components/AdminDashboard";
+
 
 const App = () => {
   return (
     <div className='bg-[#051139] h-auto'>
-    <Hero />
-    <About />
-    <Pricing />
-    <Feedback />
-    <Footer />
+      <Routes>
+       <Route path="/" element={<Home />} />
+       <Route path="/admin" element={<AdminDashboard />} />
+
+   
+    </Routes>
     </div>
   )
 }

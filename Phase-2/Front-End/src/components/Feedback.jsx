@@ -31,12 +31,12 @@ const Feedback = () => {
     return (
         <div className='h-auto pb-20 mt-[100px]'>
             <div className='flex items-start justify-center'>
-                <h1 className='text-white font-rale font-bold text-[60px]'>Help Us To Develop By Giving A Feedback</h1>
+                <h1 className='text-white font-rale font-bold text-[30px] text-center lg:text-[60px]'>Help Us To Develop By Giving A Feedback</h1>
             </div>
-            <form onSubmit={handleSubmit} className='flex flex-col items-center'>
+            <form onSubmit={handleSubmit} className='flex flex-col items-center px-10'>
                 <input
                     type="text"
-                    className='w-1/2 border-2 p-3 mt-[70px] border-white bg-transparent rounded-lg placeholder:text-[19px] text-white'
+                    className='lg:w-1/2  w-full border-2 p-3 mt-[70px] border-white bg-transparent rounded-lg placeholder:text-[19px] text-white'
                     placeholder='Your Name'
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -44,14 +44,14 @@ const Feedback = () => {
                 />
                 <input
                     type="email"
-                    className='w-1/2 border-2 p-3 my-[40px] border-white bg-transparent rounded-lg placeholder:text-[19px] text-white'
+                    className='lg:w-1/2  w-full border-2 p-3 my-[40px] border-white bg-transparent rounded-lg placeholder:text-[19px] text-white'
                     placeholder='Your E-mail'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
                 <textarea
-                    className='w-1/2 border-2 p-3 pt-3 h-[160px] border-white bg-transparent rounded-lg placeholder:text-[19px] text-white'
+                    className='lg:w-1/2 border-2 w-full  p-3 pt-3 h-[160px] border-white bg-transparent rounded-lg placeholder:text-[19px] text-white'
                     placeholder='Your Thoughts'
                     value={thoughts}
                     onChange={(e) => setThoughts(e.target.value)}
@@ -59,7 +59,7 @@ const Feedback = () => {
                 />
                 <button
                     type="submit"
-                    className='border-2 border-[#6A65FF] w-1/2 hover:bg-[#6A65FF] text-white font-rale font-semibold py-3 px-5 rounded-md lg:text-[17px]'
+                    className='border-2 border-[#6A65FF] lg:w-1/2 hover:bg-[#6A65FF] my-10 text-white font-rale font-semibold py-3 px-5 rounded-md lg:text-[17px]'
                 >
                     SHARE YOUR FEEDBACK
                 </button>

@@ -11,7 +11,7 @@ const About = () => {
             <img src={Activity} className='w-[600px]' alt="" />
         </div>
         <div className='lg:w-1/2'>
-        <h1 className='text-white font-rale font-bold text-3xl text-center my-8 text-start text-[47px] w-[700px] leading-normal'>
+        <h1 className='text-white font-rale font-bold text-3xl my-8 text-center lg:text-start lg:text-[47px] lg:w-[700px] leading-normal'>
   Help You Find The Best Analysis For Your Business
 </h1>
         
